@@ -21,21 +21,29 @@ string which represents a number. The second marker (j) starts at i+1 and moves 
 string is checked, or is reset to i+1 if i moves.
 
 So for example, given this string: "asitwone"
-i   j   Substring   Result
-0   1   a           No numbers start with the letter a so can immediately move i along
-1   2   s           Might be the start of "six" or "seven", keep going
-1   3   si          Can only be "six" now
-1   4   sit         Definitely not a number, move i along
-2   3   t           Could be the start of "two" or "three"
-2   4   tw          Nearly there...
-2   5   two         This is a number! So we stop
+| i | j | Substring | Result                                                             |
+|---|---|-----------|--------------------------------------------------------------------|
+| 0 | 1 | a         | No numbers start with the letter a so can immediately move i along |
+| 1 | 2 | s         | Might be the start of "six" or "seven", keep going                 |
+| 1 | 3 | si        | Can only be "six" now                                              |
+| 1 | 4 | sit       | Definitely not a number, move i along                              |
+| 2 | 3 | t         | Could be the start of "two" or "three"                             |
+| 2 | 4 | tw        | Nearly there...                                                    |
+| 2 | 5 | two       | This is a number! So we stop                                       |
 
 The substring checking is easy because we can pre-calculate all the possible sub-strings of the
 strings which represent the numbers one to nine - there aren't that many. e.g. these are all the
 valid 1 and 2 letter starts of numbers (using python sets here so that the 't' at the start of 
 'two' and at the start of 'three' doesn't create a duplication):
+
+`
 {'e', 'f', 'n', 'o', 's', 't'}
+`
+
+`
 {'ei', 'fi', 'fo', 'ni', 'on', 'se', 'si', 'th', 'tw'}
+`
+
 
 Also whenever we move i we check if the char at i is a numeric (0-9) and stop straight away if so.
 
@@ -51,14 +59,14 @@ calculate the valid_ends as well and do everything literally in reverse.
 
 ### Part 1
 
-Again parsing approach was pretty basic, split on the colon and remove "Game " to get the game ID, 
-split the remainder on ";" to get each draw in the game, and split those on "," to get each colour
+Again parsing approach was pretty basic, split on `":"` and remove `"Game "` to get the game ID, 
+split the remainder on `";"` to get each draw in the game, and split those on `","` to get each colour
 in the draw.
 
 Put a bit more effort into the data structures this time which paid off when I got to part 2. Stored
 every draw in every game so we could do some reasoning later on.
 
-GetMaxDraw just works out the maximum draw we can guarantee based on the draws we've seen so far, it
+`GetMaxDraw` just works out the maximum draw we can guarantee based on the draws we've seen so far, it
 is just a combination of the highest # of each colour seen in any draw. Basically if we had seen the
 actual amount of each colour drawn at some point (even if that was across different draws) and we
 emptied the bag in one draw, this is what we would expect to see.
@@ -69,6 +77,6 @@ possible.
 
 ### Part 2
 
-Having done the work up front to put the information into objects, this was easy. GetMaxDraw already
+Having done the work up front to put the information into objects, this was easy. `GetMaxDraw` already
 gives us the minimum number of cubes of each colour required to play any game, so we just need to
 calculate the "power" of that draw for each game and sum them. Simples! 
