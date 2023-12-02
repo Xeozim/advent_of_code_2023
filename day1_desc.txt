@@ -27,10 +27,10 @@ two-digit number.
 
 For example:
 
-1abc2
-pqr3stu8vwx
-a1b2c3d4e5f - extra digits ignored
-treb7uchet - single digit counted twice
+1abc2 - 1 2
+pqr3stu8vwx - 3 8
+a1b2c3d4e5f - 1 5 - extra digits ignored
+treb7uchet - 7 7 - single digit counted twice
 
 In this example, the calibration values of these four lines are 12, 38, 15, and 77.
 Adding these together produces 142.

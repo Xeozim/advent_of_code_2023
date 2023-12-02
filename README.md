@@ -27,9 +27,10 @@ So for example, given this string: "asitwone"
 | 1 | 2 | s         | Might be the start of "six" or "seven", keep going                 |
 | 1 | 3 | si        | Can only be "six" now                                              |
 | 1 | 4 | sit       | Definitely not a number, move i along                              |
-| 2 | 3 | t         | Could be the start of "two" or "three"                             |
-| 2 | 4 | tw        | Nearly there...                                                    |
-| 2 | 5 | two       | This is a number! So we stop                                       |
+| 2 | 3 | i         | No numbers start with the letter i, move i along                   |
+| 3 | 4 | t         | Could be the start of "two" or "three"                             |
+| 3 | 5 | tw        | Nearly there...                                                    |
+| 3 | 6 | two       | This is a number! So we stop                                       |
 
 The substring checking is easy because we can pre-calculate all the possible sub-strings of the
 strings which represent the numbers one to nine - there aren't that many. e.g. these are all the
