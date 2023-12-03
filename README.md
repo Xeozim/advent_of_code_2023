@@ -80,4 +80,42 @@ possible.
 
 Having done the work up front to put the information into objects, this was easy. `GetMaxDraw` already
 gives us the minimum number of cubes of each colour required to play any game, so we just need to
-calculate the "power" of that draw for each game and sum them. Simples! 
+calculate the "power" of that draw for each game and sum them. Simples!
+
+
+## Day 3
+
+### Part 1
+
+First approach that springs to mind is to copy the day 2 tactic of building a nice data structure
+which will hopefully answer both parts. In this case we can view the schematic as a series of 
+contiguous blocks of numbers, symbols (other than full stops), and blanks (full-stop symbols).
+The blocks for the first two lines of the example schematic would look like this
+467..114..      =       [467][ .. ][114][..]
+...*......      =       [...][*][  ......  ]
+
+We can generate blocks for a line simply enough. I bet there is a regex way to do this but I've
+managed to avoid them so far so I'll just parse the line char by char. To do this there are two ints
+to represent the start (i) and end (j) indices of the substring we're currently looking at. Every
+iteration we need to check the type of the next letter (the one at j+1) to see if it's the same as
+the contents of the current block we're building. If it isn't then we finalise the current block
+and start a new one, setting i and j to j+1.
+
+Just a note here that compared to previous days numbers are considered as a whole i.e. 467 is
+four hundred and sixty seven not 4, 6, and 7.
+
+When parsing a block we need to know the index at which it starts and ends, so that we can work out
+which blocks are connected to it above and below. When we're calculating the blocks on a given line
+we can populate the lateral (left + right) links as we go. We'll also assign a type to each block
+(numeric, symbol, blank).
+
+Once we've worked out all the blocks on each line we can populate the links between them by looking
+at the blocks in the lines above and below, not forgetting to include blocks which cover the chars
+which are diagonally adjacent.
+
+Having all the links calculated we can find the answer to part one by looping over all the blocks
+and summing the contents of numeric blocks which have any links to a symbol block.
+
+This was quite fiddly to do in the end. Got majorly tripped up by having links as a list to start
+with and ending up with duplication in those lists. Also messed up checking the lines below AND the
+cell at the top right because mixing 0 indices and 1 indices confuses me.
