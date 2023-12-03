@@ -119,3 +119,10 @@ and summing the contents of numeric blocks which have any links to a symbol bloc
 This was quite fiddly to do in the end. Got majorly tripped up by having links as a list to start
 with and ending up with duplication in those lists. Also messed up checking the lines below AND the
 cell at the top right because mixing 0 indices and 1 indices confuses me.
+
+### Part 2
+
+Part 1 was worth all the effort, the nice data structure and inadvertendly well-debugged parsing
+means that we can do this bit nice and easily. A couple of extra functions in the Block class can
+check if any block is a gear and calculate the gear ratio, and we can get the sum the same way as we
+did for summing the numeric values.
