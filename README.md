@@ -151,3 +151,15 @@ not going to bother with a proper testing framework, will just have a specific t
 Went pretty well, worked 2nd time. Ironically the tests passed with the first implementation but
 the real input had more space handling required, possibly due to the way it was split from a multi-
 line string.
+
+### Part 2
+
+More of a twist than previous days! Explains the suspiciously reducing scores on the example cards...
+
+The obvious but potentially quite slow approach is just to work down the cards, counting the amount
+of copies we have of each one as we go. So we'll just build a list that contains an integer value
+for the number of copies of each card, remembering of course that each card we process we have to
+take account of how many copies of that card there are based on previously processed cards.
+
+This worked nicely, and not really slow to be honest, VS code still registered it as 0.0s.
+So I'm calling that a win!
