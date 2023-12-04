@@ -126,3 +126,28 @@ Part 1 was worth all the effort, the nice data structure and inadvertendly well-
 means that we can do this bit nice and easily. A couple of extra functions in the Block class can
 check if any block is a gear and calculate the gear ratio, and we can get the sum the same way as we
 did for summing the numeric values.
+
+
+## Day 4
+
+First impressions are that this is a fairly simple one, at least based on part 1. Planning to follow
+a similar approach in terms of parsing the input into a bunch of useful objects which will give me
+the answers. In addition will try to implement the example input as a test set.
+
+### Part 1
+
+Parsing approach is pretty simple, split on `:` to separate the card id from the numbers, then split
+on `|` to separate the winning numbers from the player numbers, then split on ` ` (space) to get
+each number.
+
+Will have a single class which represents a card, containing the card ID, the set of winning numbers
+and the set of player numbers. The class will also define a function to calculate the matching
+numbers and one to calculate the score based on how many matching numbers there are.
+
+The description provides us with 6 examples each of which has an answer for how many points it is
+worth, so we can turn each of them into a test case. Because I'm just using jupyter notebooks I'm
+not going to bother with a proper testing framework, will just have a specific testing section.
+
+Went pretty well, worked 2nd time. Ironically the tests passed with the first implementation but
+the real input had more space handling required, possibly due to the way it was split from a multi-
+line string.
