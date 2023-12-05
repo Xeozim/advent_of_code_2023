@@ -219,3 +219,37 @@ because we're not applying each mapping to a dozen or so seed numbers, but to hu
 For example in my input the first pair of numbers describes nearly 100 million seeds.
 
 Hmmmmmm....
+
+OK how about this, we only care about the lowest result, and the mappings are defined in fairly big
+non-overlapping chunks. So why not explore the edges of each mapping chunk and trace a path to the
+lowest location number. In order to guarantee that the number we find is the lowest we can work
+backwards from location to seed, trying different chunks of location numbers until we find one that
+maps to a valid seed number.
+
+So, we know from the humidity-to-location map which blocks of locations map to which blocks of
+humidity. In the example data this is fairly simple, locations 0 -> 55 are unaffected by any mapping
+and so map to humidity values 0 -> 55. The next highest block of locations is 56 -> 59 and maps to
+humidities 93 -> 96 as defined by the line "`56 93 4`".
+
+Say we want to explore the temperatures that map to the lowest location numbers. We can use the
+humidity to location map block with the lowest output (0 -> 55 default mapping to humidity 0 -> 55)
+then we know if we can find the temperature values which map to that block, they will have the
+lowest possible location values. The temperature-to-humidity map in turn tells us that humidity 0
+maps to temperature 69 ("`0 69 1`"), and the others in the block (1 -> 55) map to the number above
+them ("`1 0 69`").
+
+We can repeat this process all the way back to the seed side of the mappings. Once we have a block
+of candidate seed numbers we can check if any of them are valid relatively easily. If none exist we
+go back one level and try the next branch, repeating until we find a path through our mappings which
+starts in the lowest possible block of locations and finds a valid seed number. Because the ordering
+of numbers is unchanged by a particular mapping, we can just find the lowest valid seed number and
+trace back through the mapping path to get the corresponding location, which should be the lowest...
+right?
+
+This process is obviously quite complex and will involve a fair bit of recursive branching, but the
+number of operations should be way lower, especially as it's basically impossible that we'll have to
+actually check all the possible branches.
+
+The first thing that will probably be helpful is to create RangedMapper objects for the default
+map behaviour (where a number maps to itself). We can do this when we create the Mapping objects
+by having the code fill in any gaps left by the mappers passed to the constructor.
