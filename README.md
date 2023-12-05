@@ -207,3 +207,15 @@ Writing tests went pretty well yesterday so same again today, will have a couple
 testing the parsing, then test the overall mapping logic with a bunch for each stage of
 transformation (seed-to-soil, soil-to-fertilizer, etc.) using the example data.
 
+### Part 2
+
+Looks like a relatively simple change, most of the code for part 1 will still be useful we just
+need to generate some more seed numbers. So the plan is to change the function that gets the seeds
+from the inputs to call out to another function if we set a flag that says the seed string is
+representing ranges (basically meaning use for part 2).
+
+However, now it looks like it might be worth investing in a more complicated mapping approach,
+because we're not applying each mapping to a dozen or so seed numbers, but to huge numbers of them!
+For example in my input the first pair of numbers describes nearly 100 million seeds.
+
+Hmmmmmm....
