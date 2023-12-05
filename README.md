@@ -163,3 +163,47 @@ take account of how many copies of that card there are based on previously proce
 
 This worked nicely, and not really slow to be honest, VS code still registered it as 0.0s.
 So I'm calling that a win!
+
+
+## Day 5
+
+### Part 1
+
+On the face of it quite complex, but there's lots of tests provided and it's effectively the same
+thing several times in a row (but not in such a way that it's combinatorially explosive).
+
+Initial thinking was just to do what they do in the example and build an actual map for each step
+i.e. have a list as long as the number of seeds where the corresponding entry in that list is the
+soil type for that seed.
+
+However, looking at the actual input the numbers get very large, so probably would be faster to take
+what feels like a slightly cruder approach - store the map ranges in a class, then find and apply
+the appropriate map range every time we want to map a specific number. We'll also have a class to
+represent each mapping type i.e. seed-to-soil. These will store a collection of map ranges sorted
+by input value, then when we want to do a mapping we can just find the appropriate range and apply
+it (or reuse the input value if there isn't one).
+
+It feels like there is probably some clever way to combine the mappings so that you could have a
+single mapping from seed to location (which is all we really care about). But I can't think how to
+do this and started this one early to get more points so not hanging around waiting for inspiration.
+
+To parse things, was going to go line by line with stored state but turned out to be neater to split
+the whole string into blocks based on empty lines, then we have one block per mapping and one at the
+top for the seed numbers.
+ - For getting the first line of input (the seed numbers)
+   - All can be integers of arbitrary length
+   - In keeping with previous days going to avoid regex. Will split on spaces then do a call to
+     `int()` on all but the first (which should contain "`seeds:`" to extract the values
+ - Similarly to the overall blocks, a mapping block can be split by lines into:
+   - The first line of the block / beginning of a map i.e. "`x-to-y map:`"
+      - Based on the input we can assume that x and y are just lower case alphabetical characters
+      - In keeping with previous days going to avoid regex and just split the string a couple of times,
+        once on spaces to get the "`x-to-y`" away from "`map:`", and then on hyphens to get "`x`",
+        "`to`", and "`y`"
+   - A series of lines containing map range definitions i.e. "`a b c`" where we want to capture a, b
+     , and c. Parsing here is the same as for the seed numbers
+
+Writing tests went pretty well yesterday so same again today, will have a couple of simple ones for
+testing the parsing, then test the overall mapping logic with a bunch for each stage of
+transformation (seed-to-soil, soil-to-fertilizer, etc.) using the example data.
+
