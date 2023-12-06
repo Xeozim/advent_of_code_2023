@@ -314,3 +314,11 @@ On testing it turns out that race 3 is a good indicator (a well chosen example E
 The solutions to it's quadratic are exactly 10 and 20, so we calculate the range as 10,11,...19,20.
 But these will give us record *equalling* distances, not record beating. Slight tweak to the logic
 to use $c=-(r+1)$ should fix this.
+
+### Part 2
+
+Vindication! Our approach scales really well to this sort of thing. There's only one a couple of
+tweaks to make. Firstly we shouldn't generate the list of possible winning races and count its
+length, we can just take the answers at the limit away from one another to find the same thing.
+Secondly we need to update the parsing to ignore spaces. Both easy to do, and we'll add another test
+to make sure we do it right.
