@@ -253,3 +253,64 @@ actually check all the possible branches.
 The first thing that will probably be helpful is to create RangedMapper objects for the default
 map behaviour (where a number maps to itself). We can do this when we create the Mapping objects
 by having the code fill in any gaps left by the mappers passed to the constructor.
+
+... To be continued ...
+
+
+## Day 6
+
+This looks much more friendly! Nice physicsy question even if the physics are a bit quirky in this
+world.
+
+### Part 1
+
+#### Quadratic Formulas
+This feels like solving equations to me. The distance travelled $s$ for a given race is given by
+$(s = (t - h) * h)$ where $t$ is the time available, and $h$ is how long we hold down the button. We
+want to find all the solutions where $s > r$ where $r$ is the current record.
+
+Lucky for us we know (either by instinct or using the example) that the behaviour is quadratic in
+nature - it has a single maximum point and falls away equally in both directions. So all we have to
+do is find the point where the equation for $s$ crosses the value of $r$, it will do this twice if
+there is more than one solution (once on the way up, and again on the way down).
+
+If we rearrange a bit we can come up with a quadratic equation in the form $ax^2 + bx + c = 0$:
+
+$r = (t - h) * h$ => $r = -h^2 + th$ => $-h^2 + th - r = 0$
+
+We can use the [quadratic formula](https://en.wikipedia.org/wiki/Quadratic_formula) to solve this,
+substituting:
+$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
+
+In our case $x$ is $h$, $a=-1$, $b=t$, and $c=-r$*.
+
+
+The $\pm$ in the equation will give us two answers (most of the time), which will correspond to the
+two points where the line $s = (t - h) * h$ crosses $s = r$.
+
+Let's try this out with the example they use. So $t=7$, and $r=9$. Solving the quadratic formula
+gives us two roots: $5.3$ and $1.7$ (rounded to 1 d.p.). Because our toy boat race only works in
+integer values we have to round these. In order to get integers which will beat the record we have
+to round up the lower value and round down the higher one. For the example this gives us 2 and 5 as the edges of our record setting zone, the same as they got :tada:. Then we can just work out the 
+number of possible record setting values by doing 5 - 2 + 1 (+1 makes the range inclusive) to get 4.
+
+*: This was updated to $c=-(r+1)$, see note in [Testing](#testing)
+
+#### Code
+Very long explanation, lets get started on the code.
+
+We'll parse the input into a series of Race objects, each one with a time and record distance. The
+Race class will implement our logic, calling out to a utility function for solving a quadratic
+equation
+
+The input is arranged slightly differently to previous days, each object we want to create is a
+column rather than a row. So we'll have to parse all the rows to get the numbers in each then
+iterate over them to create objects from the values in each column.
+
+Everything else is just utilities and testing stuff.
+
+#### Testing
+On testing it turns out that race 3 is a good indicator (a well chosen example Eric!).
+The solutions to it's quadratic are exactly 10 and 20, so we calculate the range as 10,11,...19,20.
+But these will give us record *equalling* distances, not record beating. Slight tweak to the logic
+to use $c=-(r+1)$ should fix this.
