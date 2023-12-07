@@ -377,3 +377,14 @@ card 2, a 6 at card 3 (value 4), and sevens at cards 4 and 5 (value 5). So the r
 this hand is $2*13^5 + 11*13^4 + 11*13^3 + 4*13^2 + 5*13^1 + 5*13^0 = 1081670$. In the code we don't
 actually bother with storing the representation in base 13, we just store it as an int, the highest
 value possible is 2599050 (AAAAA) which easily fits into int representation.
+
+### Part 2
+
+Looks like a fairly manageable change, making JACK into JOKER and re-arranging the card strengths is
+a quick change to the `Card` enum, and we can just maintain a separate joker count when working out
+the card type. The basic approach I took is helpful here because we can just update the logic for
+each check to include the relevant joker consideration e.g. the `occurrences == 5` check for a
+five-of-a-kind can just become `occurrences == 5 or (occurrences == 4 and jokers == 1)`.
+
+Most annoying bit is we can't make these changes in a way that preserves the original logic, so will
+have to make a whole new notebook for part 2 so that we can still see how part 1 worked.
