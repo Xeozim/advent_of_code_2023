@@ -291,7 +291,8 @@ two points where the line $s = (t - h) * h$ crosses $s = r$.
 Let's try this out with the example they use. So $t=7$, and $r=9$. Solving the quadratic formula
 gives us two roots: $5.3$ and $1.7$ (rounded to 1 d.p.). Because our toy boat race only works in
 integer values we have to round these. In order to get integers which will beat the record we have
-to round up the lower value and round down the higher one. For the example this gives us 2 and 5 as the edges of our record setting zone, the same as they got :tada:. Then we can just work out the 
+to round up the lower value and round down the higher one. For the example this gives us 2 and 5 as
+the edges of our record setting zone, the same as they got :tada:. Then we can just work out the
 number of possible record setting values by doing 5 - 2 + 1 (+1 makes the range inclusive) to get 4.
 
 *: This was updated to $c=-(r+1)$, see note in [Testing](#testing)
@@ -322,3 +323,57 @@ tweaks to make. Firstly we shouldn't generate the list of possible winning races
 length, we can just take the answers at the limit away from one another to find the same thing.
 Secondly we need to update the parsing to ignore spaces. Both easy to do, and we'll add another test
 to make sure we do it right.
+
+
+## Day 7
+
+### Part 1
+
+Bit of a classic this, ranking poker hands. I happen to know that this is somewhat of a solved
+problem. At scale the best thing to do is use a pre-calculated list of ordered poker hands and an
+efficient technique for looking up two items in that list. For regular poker hands there is a well
+known tool called the Two Plus Two hand evaluator which uses this approach.On initial reading I was
+tempted to just download the datafile for 2+2 and use that, however Eric is one step ahead as always
+and the ordering system for hands is slightly different here, so leaving this idea in the back
+pocket for now, might come back to this in part 2.
+
+In regular 5 card poker games, the order of the cards is not important. If two hands have the same
+type (full house / two pair / high card etc.) then the constituent card ranks come into play i.e. a
+four of a kind (2AAAA) is better than (33332) because the card that defines the type is higher (A>3).
+
+In camel cards, the order of the cards is the 2nd most important thing after hand type. This is
+much simpler for us to deal with, all we have to do is find out what type each hand is, and then we
+can do a 6-step sort over the whole list of cards. Note that we sort by the least important factor
+first:
+ 1. Value of 5th card
+ 2. Value of 4th card
+ ...
+ 5. Value of 1st card
+ 6. Hand type
+
+Also worth noting that we can have different hand types to normal poker in camel cards, no flushes
+or straights, and 5 of a kinds but that won't really affect the implementation as far as I can tell.
+
+As always we'll have container classes to parse things into, in this case Hand which tells us what
+cards are in the hand and will contain the function for ranking two hands, and a Card enum which
+stores the value of a single card defines the card ordering which we can use for sorting.
+
+Because we're using python, the easiest sorting method is to define a function which turns our
+object into something python already knows how to sort. So we'll do that in a function called
+SortKey in the Hand class.
+
+The approach here is to turn every hand into an integer that represents the rank of that hand. We
+can guarantee the order of these integers is what we want by using a base-13 system. Each digit in
+this system instead of representing ten values (from 0 to 9 like the standard base-10 system) can
+represent thirteen values (0 to 13), the value of each digit increases by a multiplie of by 13
+rather than by 10. So in base-13 the number `200` is $2*13^2 = 338$. We choose 13 because that's just
+enough resolution to include all our card values in a single digit, and because there are fewer hand
+types than card values it can encompass that too.
+
+So we effectively generate a 6 digit base-13 number to represent each hand, with the first digit
+representing the hand type, the second digit the value of the first card, etc. For example the hand
+`KK677` is a two pair (enum value = 2) with a king at card 1 (enum value 11), another king at
+card 2, a 6 at card 3 (value 4), and sevens at cards 4 and 5 (value 5). So the representation of
+this hand is $2*13^5 + 11*13^4 + 11*13^3 + 4*13^2 + 5*13^1 + 5*13^0 = 1081670$. In the code we don't
+actually bother with storing the representation in base 13, we just store it as an int, the highest
+value possible is 2599050 (AAAAA) which easily fits into int representation.
