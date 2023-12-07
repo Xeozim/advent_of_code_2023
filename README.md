@@ -392,3 +392,13 @@ to rewrite some tests and make sure we're checking the new joker card a bit.
 
 Well that's frustrating, the new tests pass and we get the right answer for the example, but not the
 real input apparently!
+
+Looking at the hand rankings, hands with jokers at the start are consistently ranked very low, which
+doesn't make sense. The lowest rank hand has two jokers in!
+
+The logic adjustment for calculating hand type was too simple, for trips and pairs it's not enough
+to just include the jokers against everything, because then we end up double counting. Need to count
+the pairs and triplets as normal then include the jokers when we're working out if a hand is a full
+house / three of a kind / two pair / one pair. We can ignore the case where there are three or four
+jokers, because that will give us a five of a kind, but we do need to check some other cases such as
+a pair of jokers making a three-of-a-kind.
