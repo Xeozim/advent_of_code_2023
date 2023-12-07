@@ -384,7 +384,11 @@ Looks like a fairly manageable change, making JACK into JOKER and re-arranging t
 a quick change to the `Card` enum, and we can just maintain a separate joker count when working out
 the card type. The basic approach I took is helpful here because we can just update the logic for
 each check to include the relevant joker consideration e.g. the `occurrences == 5` check for a
-five-of-a-kind can just become `occurrences == 5 or (occurrences == 4 and jokers == 1)`.
+five-of-a-kind can just become `occurrences + joker_count == 5`.
 
 Most annoying bit is we can't make these changes in a way that preserves the original logic, so will
-have to make a whole new notebook for part 2 so that we can still see how part 1 worked.
+have to make a whole new notebook for part 2 so that we can still see how part 1 worked. Also have
+to rewrite some tests and make sure we're checking the new joker card a bit.
+
+Well that's frustrating, the new tests pass and we get the right answer for the example, but not the
+real input apparently!
