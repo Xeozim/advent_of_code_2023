@@ -402,3 +402,14 @@ the pairs and triplets as normal then include the jokers when we're working out 
 house / three of a kind / two pair / one pair. We can ignore the case where there are three or four
 jokers, because that will give us a five of a kind, but we do need to check some other cases such as
 a pair of jokers making a three-of-a-kind.
+
+That wasn't quite right, we're still mis-classifying full-houses that include a Joker as two pair
+e.g. `44KKJ` was classified as two pair. Need to check for any pairs and a joker when converting
+pairs to triples using a joker (not just one pair).
+
+Also turns out that our logic for early returns when we find a four-of-a-kind is wrong, if there are
+four jokers e.g. `J8JJJ` the first card we check (2) can have an occurrence count of 0 but we'll
+still early exit thinking there's quads, but later in the occurrence array one of the cards (8) will
+have a count of 1 and we'll find a quintet so we should be waiting to see if that's the case.
+
+Yatta! Success at last, that was harder than it ought to have been.
